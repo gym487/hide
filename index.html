@@ -74,9 +74,9 @@ function encode(){
 	var bits=new Array();
 	var c=document.getElementById("c").value;
 	var inp=document.getElementById("in").value;
-	c=c+String.fromCharCode(123456);
+	c=c+String.fromCharCode(12345);
 	for(var a=0;a<c.length;a++){
-	bits.push.apply(bits,tran(c.charCodeAt(a),24));
+	bits.push.apply(bits,tran(c.charCodeAt(a),16));
 	}
 var bitss=new Array();
 for(var a=0;a<bits.length;a=a+4){
@@ -159,13 +159,14 @@ function decode(){
 		}
 		console.log(bits.toString());
 		console.log(bitss.toString());
-		for(var i=0;i<bitss.length;i=i+24){
+		out:
+		for(var i=0;i<bitss.length;i=i+16){
 			var s=0;
-			for(var j=0;j<24;j++){
+			for(var j=0;j<16;j++){
 				s=s+bitss[i+j]*Math.pow(2,j);
 			}
-			if(s==123456){
-				break;
+			if(s==12345){
+				break out;
 			}
 			outs=outs+String.fromCharCode(s);
 		
@@ -173,16 +174,16 @@ function decode(){
 	document.getElementById("c").value=outs;
 }
 function ch(){
-	document.getElementById("yi").innerHTML=(document.getElementById("c").value.length*42).toString();
+	document.getElementById("yi").innerHTML=(document.getElementById("c").value.length*28).toString();
 }
 </script>
 </head>
 <body>
 <center>
-	<a>可用信道容量:</a>
+	<a>可用信道容量(bit):</a>
 	<a id="en">0</a>
 	<br>
-	<a>已用信息量(使用无压缩的Unicode编码及4-7汉明码):</a>
+	<a>已用信息量(使用无压缩的UTF-16编码及4-7汉明码)(bit):</a>
 	<a id="yi">0</a><br>
 	<button onclick="check()">检测可用信道容量</button>
 <br>
