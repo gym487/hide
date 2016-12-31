@@ -1,0 +1,52 @@
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>测试</title>
+<script scr="list.js"/>
+<script>
+function check(){
+	var ent=0;
+	var arr=new array();
+	var input=document.getElementById("in").value;
+	for(var i;i<input.length;i++){
+		for(var j;j<list.length;j++){
+			for(var k;j<list[j].length,k++){
+				if(input.substring(i,i+list[j][k].length)==list[j][k]){
+					ent=ent+Math.log(list[j].length)/Math.log(2);
+					k=list[j].length+1;
+					arr.push({index:i,len:list[j][k].length,sel:list[j].length,word:j});
+				}
+			}
+		}
+	}
+	document.getElementById("en").InnerHtml=ent.toString();
+	return arr;
+}
+function tran(a,s){
+	var bs=new array();
+	for(var i;i<s;i++){
+		bs.push(a%2);
+		a=Math.floor(a/2);
+	}//little endian
+	return bs;
+}
+function encode(){
+	var bits=new array();
+	var c=document.getElementById("c").value;
+	for(var a=0;a<c.length;c++){
+	bits.push.apply()
+	}
+}
+</script>
+</head>
+<body>
+<center>
+	<p id="en"></p>
+<textarea id="in"/>
+<textarea id="c"/>
+
+<textarea id="out"/>
+
+</center>
+</body>
+</html>
