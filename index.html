@@ -194,7 +194,7 @@ console.log(bits.toString());
 }
 function ch(){
 	if(document.getElementById("ck").checked==false){
-	document.getElementById("yi").innerHTML="已用信息量(使用无压缩的UTF-16编码及4-7汉明码)(bit): "+(document.getElementById("c").value.length*28).toString();
+	document.getElementById("yi").innerHTML="已用信息量(使用无压缩的UTF-16编码及7-4汉明码)(bit): "+(document.getElementById("c").value.length*28).toString();
 }else{
 	document.getElementById("yi").innerHTML="已用信息量(使用无压缩的UTF-16编码及‘强力’纠错码)(bit): "+(document.getElementById("c").value.length*48).toString();
 }
@@ -207,7 +207,7 @@ function ch(){
 	<a id="en">0</a>
 	<br>
 	
-	<a id="yi">已用信息量(使用无压缩的UTF-16编码及7-4汉明码)(bit): 0</a><br>
+	<a id="yi">已用信息量(使用无压缩的UTF-16编码及‘强力’纠错码)(bit):  0</a><br>
 	<button onclick="check()">检测可用信道容量</button> 
 <br>
 载体：
