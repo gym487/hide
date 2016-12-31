@@ -2,50 +2,198 @@
 <head>
 <meta charset="utf-8"/>
 <title>测试</title>
-<script scr="list.js"/>
+<script src="list2.js"></script>
 <script>
+function tablegen(){
+	var table=new Array();
+	for(var a=2;a<100;a++){
+		var c=new Array();
+		var b=a;
+			for(var i=0;i<8;i++){
+		
+		c.push(b%2);
+		b=Math.floor(b/2);
+		if(b==0){
+			break;
+			
+		}
+	}
+	c.pop();
+	table.push(c);
+}
+return table;
+}
+
+	
 function check(){
 	var ent=0;
-	var arr=new array();
+	var arr=new Array();
 	var input=document.getElementById("in").value;
-	for(var i;i<input.length;i++){
-		for(var j;j<list.length;j++){
-			for(var k;j<list[j].length,k++){
+	var cc=document.getElementById("c").value;
+	for(var i=0;i<input.length;i++){
+		jlp:
+		for(var j=0;j<list.length;j++){
+			for(var k=0;k<list[j].length;k++){
 				if(input.substring(i,i+list[j][k].length)==list[j][k]){
 					ent=ent+Math.log(list[j].length)/Math.log(2);
-					k=list[j].length+1;
-					arr.push({index:i,len:list[j][k].length,sel:list[j].length,word:j});
+					
+					arr.push({index:i,len:list[j][k].length,sel:list[j].length,word:j,tt:-1});
+					i=i+list[j][k].length-1;
+					break jlp;
 				}
+				
 			}
 		}
 	}
-	document.getElementById("en").InnerHtml=ent.toString();
+	document.getElementById("en").innerHTML=ent.toString()
 	return arr;
 }
 function tran(a,s){
-	var bs=new array();
-	for(var i;i<s;i++){
+	var bs=new Array();
+	for(var i=0;i<s;i++){
 		bs.push(a%2);
 		a=Math.floor(a/2);
 	}//little endian
 	return bs;
 }
-function encode(){
-	var bits=new array();
-	var c=document.getElementById("c").value;
-	for(var a=0;a<c.length;c++){
-	bits.push.apply()
+function eqal(a,b,c){
+	//var a=false;
+	//if(a.length==b.length){
+	///var	a=true;
+	for(var i=0;i<a.length;i++){
+			if(a[i]!=b[i+c]){
+				return false;
+			}
+		}
+		return true;
 	}
+		
+function encode(){
+	var bits=new Array();
+	var c=document.getElementById("c").value;
+	var inp=document.getElementById("in").value;
+	c=c+String.fromCharCode(123456);
+	for(var a=0;a<c.length;a++){
+	bits.push.apply(bits,tran(c.charCodeAt(a),24));
+	}
+var bitss=new Array();
+for(var a=0;a<bits.length;a=a+4){
+bitss.push((bits[a+3]+bits[a+1]+bits[a])%2);
+bitss.push((bits[a+3]+bits[a+2]+bits[a])%2);
+bitss.push((bits[a+3]+bits[a+2]+bits[a+1])%2);
+bitss.push(bits[a]);
+bitss.push(bits[a+1]);
+bitss.push(bits[a+2]);
+bitss.push(bits[a+3]);
+}
+var arr=check();
+var table=tablegen();
+var outs="";
+//var tra=new Array();
+var p=0;
+for(var i=0;i<arr.length&&p<bitss.length;i++){
+	for(var j=arr[i].sel-1;j>=0;j--){
+		if(eqal(table[j],bitss,p)==true){
+			arr[i].tt=j;//trans to
+			p=p+table[j].length;
+			break;
+		}
+}
+}
+p=0;
+console.log(bits.toString());
+console.log(bitss.toString());
+for(var i=0;i<arr.length&&arr[i].tt!=-1;i++){
+	outs=outs+inp.substring(p,arr[i].index);
+	p=arr[i].index+arr[i].len;
+	outs=outs+list[arr[i].word][arr[i].tt];
+}
+outs=outs+inp.substring(p,inp.length);
+document.getElementById("out").value=outs;
+}
+function decode(){
+	var table=tablegen();
+	var arr=new Array();
+	var bits=new Array();
+	var outs="";
+	var input=document.getElementById("out").value;
+	for(var i=0;i<input.length;i++){
+		jlp:
+		for(var j=0;j<list.length;j++){
+			for(var k=0;k<list[j].length;k++){
+				if(input.substring(i,i+list[j][k].length)==list[j][k]){
+					arr.push({index:i,len:list[j][k].length,sel:list[j].length,word:j,tt:k});
+					i=i+list[j][k].length-1;
+					break jlp;
+				}
+				
+			}
+		}
+	}
+		for(var i=0;i<arr.length;i++){
+		bits.push.apply(bits,table[arr[i].tt]);
+		}
+		var bitss=new Array();
+		for(var a=0;a<bits.length;a=a+7){
+			var s1=(bits[a+6]+bits[a+5]+bits[a+4]+bits[a+2])%2;
+			var s2=(bits[a+6]+bits[a+5]+bits[a+3]+bits[a+1])%2;
+			var s3=(bits[a+6]+bits[a+4]+bits[a+3]+bits[a])%2;
+			if(s1==1&&s2==0&&s3==0){
+			bits[a+3]=1-bits[a+3];
+			}
+			if(s1==1&&s2==0&&s3==1){
+			bits[a+4]=1-bits[a+4];
+			}
+			if(s1==1&&s2==1&&s3==0){
+			bits[a+5]=1-bits[a+5];
+			}
+			if(s1==1&&s2==1&&s3==1){
+			bits[a+6]=1-bits[a+6];
+			}
+			bitss.push(bits[a+3]);
+			bitss.push(bits[a+4]);
+			bitss.push(bits[a+5]);
+			bitss.push(bits[a+6]);
+		}
+		console.log(bits.toString());
+		console.log(bitss.toString());
+		for(var i=0;i<bitss.length;i=i+24){
+			var s=0;
+			for(var j=0;j<24;j++){
+				s=s+bitss[i+j]*Math.pow(2,j);
+			}
+			if(s==123456){
+				break;
+			}
+			outs=outs+String.fromCharCode(s);
+		
+}
+	document.getElementById("c").value=outs;
+}
+function ch(){
+	ducument.getElementsById("yi").value=ducument.getElementsById("c").value.length*42;
 }
 </script>
 </head>
 <body>
 <center>
-	<p id="en"></p>
-<textarea id="in"/>
-<textarea id="c"/>
-
-<textarea id="out"/>
+	<p>已用信息量(使用无压缩的Unicode编码及4-7汉明码：</p>
+	<p id="yi">0</p>
+	<p>总信道容量</p>
+	<p id="en">0</p>
+	<br>
+	<button onclick="check()">检测可用信道容量</button>
+<br>
+载体：
+<textarea id="in" rows="10" cols="40"></textarea></textarea>
+<br>
+<button onclick="encode()">编码↓↓↓↓</button><button onclick="decode()">解码↑↑↑↑</button>
+<br>
+域下信息：
+<textarea id="c" rows="5" cols="40" onchange="ch()"></textarea>
+<br>
+明文：
+<textarea id="out"  rows="10" cols="40"></textarea>
 
 </center>
 </body>
