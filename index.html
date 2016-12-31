@@ -27,6 +27,7 @@ return table;
 
 	
 function check(){
+	ch();
 	var ent=0;
 	var arr=new Array();
 	var input=document.getElementById("in").value;
@@ -172,32 +173,30 @@ function decode(){
 	document.getElementById("c").value=outs;
 }
 function ch(){
-	ducument.getElementsById("yi").value=ducument.getElementsById("c").value.length*42;
+	document.getElementById("yi").innerHTML=(document.getElementById("c").value.length*42).toString();
 }
 </script>
 </head>
 <body>
 <center>
-	<p>已用信息量(使用无压缩的Unicode编码及4-7汉明码：</p>
-	<p id="yi">0</p>
-	<p>总信道容量</p>
-	<p id="en">0</p>
+	<a>可用信道容量:</a>
+	<a id="en">0</a>
 	<br>
+	<a>已用信息量(使用无压缩的Unicode编码及4-7汉明码):</a>
+	<a id="yi">0</a><br>
 	<button onclick="check()">检测可用信道容量</button>
 <br>
 载体：
-<textarea id="in" rows="10" cols="40"></textarea></textarea>
+<textarea id="in" rows="7" cols="40"></textarea></textarea>
+<br><br>
+域下信息：
+<textarea id="c" rows="3" cols="40" onkeyup="ch()"></textarea>
 <br>
 <button onclick="encode()">编码↓↓↓↓</button><button onclick="decode()">解码↑↑↑↑</button>
 <br>
-域下信息：
-<textarea id="c" rows="5" cols="40" onchange="ch()"></textarea>
 <br>
 明文：
-<textarea id="out"  rows="10" cols="40"></textarea>
-<br>
-<br>
-<br>
+<textarea id="out"  rows="7" cols="40"></textarea>
 <br>
 <br>
 <br>
