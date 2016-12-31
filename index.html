@@ -111,8 +111,8 @@ for(var i=0;i<arr.length&&p<bitss.length;i++){
 }
 }
 p=0;
-//console.log(bits.toString());
-//console.log(bitss.toString());
+console.log(bits.toString());
+console.log(bitss.toString());
 for(var i=0;i<arr.length&&arr[i].tt!=-1;i++){
 	outs=outs+inp.substring(p,arr[i].index);
 	p=arr[i].index+arr[i].len;
@@ -169,15 +169,15 @@ function decode(){
 	}else{
 		for(var a=0;a<bits.length;a=a+3){
 		if(bits[a]+bits[a+1]+bits[a+2]<=1){
-			bitss.put(0);
+			bitss.push(0);
 		}
-		if(bits[a]+bits[a+1]+bits[a+2]>=1){
-			bitss.put(1);
+		if(bits[a]+bits[a+1]+bits[a+2]>=2){
+			bitss.push(1);
 		}
 	}
 }
-//		console.log(bits.toString());
-//		console.log(bitss.toString());
+console.log(bits.toString());
+	console.log(bitss.toString());
 		out:
 		for(var i=0;i<bitss.length;i=i+16){
 			var s=0;
