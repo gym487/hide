@@ -79,6 +79,7 @@ function encode(){
 	bits.push.apply(bits,tran(c.charCodeAt(a),16));
 	}
 var bitss=new Array();
+if(document.getElementById("ck").checked==false){
 for(var a=0;a<bits.length;a=a+4){
 bitss.push((bits[a+3]+bits[a+1]+bits[a])%2);
 bitss.push((bits[a+3]+bits[a+2]+bits[a])%2);
@@ -87,6 +88,13 @@ bitss.push(bits[a]);
 bitss.push(bits[a+1]);
 bitss.push(bits[a+2]);
 bitss.push(bits[a+3]);
+}
+}else{
+	for(var a=0;a<bits.length;a++){
+		bitss.push(bits[a]);
+		bitss.push(bits[a]);
+		bitss.push(bits[a]);
+	}
 }
 var arr=check();
 var table=tablegen();
@@ -103,8 +111,8 @@ for(var i=0;i<arr.length&&p<bitss.length;i++){
 }
 }
 p=0;
-console.log(bits.toString());
-console.log(bitss.toString());
+//console.log(bits.toString());
+//console.log(bitss.toString());
 for(var i=0;i<arr.length&&arr[i].tt!=-1;i++){
 	outs=outs+inp.substring(p,arr[i].index);
 	p=arr[i].index+arr[i].len;
@@ -136,6 +144,7 @@ function decode(){
 		bits.push.apply(bits,table[arr[i].tt]);
 		}
 		var bitss=new Array();
+		if(document.getElementById("ck").checked==false){
 		for(var a=0;a<bits.length;a=a+7){
 			var s1=(bits[a+6]+bits[a+5]+bits[a+4]+bits[a+2])%2;
 			var s2=(bits[a+6]+bits[a+5]+bits[a+3]+bits[a+1])%2;
@@ -157,8 +166,18 @@ function decode(){
 			bitss.push(bits[a+5]);
 			bitss.push(bits[a+6]);
 		}
-		console.log(bits.toString());
-		console.log(bitss.toString());
+	}else{
+		for(var a=0;a<bits.length;a=a+3){
+		if(bits[a]+bits[a+1]+bits[a+2]<=1){
+			bitss.put(0);
+		}
+		if(bits[a]+bits[a+1]+bits[a+2]>=1){
+			bitss.put(1);
+		}
+	}
+}
+//		console.log(bits.toString());
+//		console.log(bitss.toString());
 		out:
 		for(var i=0;i<bitss.length;i=i+16){
 			var s=0;
@@ -174,7 +193,11 @@ function decode(){
 	document.getElementById("c").value=outs;
 }
 function ch(){
-	document.getElementById("yi").innerHTML=(document.getElementById("c").value.length*28).toString();
+	if(document.getElementById("ck").checked==false){
+	document.getElementById("yi").innerHTML="已用信息量(使用无压缩的UTF-16编码及4-7汉明码)(bit): "+(document.getElementById("c").value.length*28).toString();
+}else{
+	document.getElementById("yi").innerHTML="已用信息量(使用无压缩的UTF-16编码及‘强力’纠错码)(bit): "+(document.getElementById("c").value.length*48).toString();
+}
 }
 </script>
 </head>
@@ -183,9 +206,9 @@ function ch(){
 	<a>可用信道容量(bit):</a>
 	<a id="en">0</a>
 	<br>
-	<a>已用信息量(使用无压缩的UTF-16编码及4-7汉明码)(bit):</a>
-	<a id="yi">0</a><br>
-	<button onclick="check()">检测可用信道容量</button>
+	
+	<a id="yi">已用信息量(使用无压缩的UTF-16编码及4-7汉明码)(bit): 0</a><br>
+	<button onclick="check()">检测可用信道容量</button> 
 <br>
 载体：
 <textarea id="in" rows="7" cols="40"></textarea></textarea>
@@ -193,7 +216,7 @@ function ch(){
 域下信息：
 <textarea id="c" rows="3" cols="40" onkeyup="ch()"></textarea>
 <br>
-<button onclick="encode()">编码↓↓↓↓</button><button onclick="decode()">解码↑↑↑↑</button>
+<button onclick="encode()">编码↓↓↓↓</button><button onclick="decode()">解码↑↑↑↑</button><input id="ck" onchange="ch()" type="checkbox" checked="true">使用强力纠错编码</input>
 <br>
 <br>
 明文：
